@@ -21,3 +21,5 @@ local Settings = {
     TriggerBot = true,
     InvisibleCheck = true
 }
+
+local z = "a"
