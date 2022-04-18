@@ -7,7 +7,7 @@ const ExpressApp = express()
 
 const WebServer = ExpressApp.listen(process.env.PORT || 3000)
 const WebSocketServ = new WebSocketServer({
-    port: 3000
+    port: 5000
 })
 
 WebSocketServ.on('connection', ws => {
