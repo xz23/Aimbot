@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local HttpService = game:GetService("HttpService")
 --[[
     4/18/2022
