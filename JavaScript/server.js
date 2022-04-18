@@ -6,7 +6,9 @@ const DiscordClient = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.
 const ExpressApp = express()
 
 const WebServer = ExpressApp.listen(process.env.PORT || 3000)
-const WebSocketServ = new WebSocketServer({WebServer})
+const WebSocketServ = new WebSocketServer({
+    port: 3000
+})
 
 WebSocketServ.on('connection', ws => {
 
