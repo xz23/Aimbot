@@ -21,7 +21,7 @@ local Settings = {
     TargetPart = false,
     TriggerBot = true,
     InvisibleCheck = true,
-    HostUrl = "",
+    HostUrl = "ws://localhost:5000",
     DiscordID = "" -- THIS IS IMPORTANT!
 }
 
@@ -40,10 +40,10 @@ do
         Message = "Connection"
     }))
     NewWebSocket.OnMessage:Connect(function(URL)
-        local LoadedRaw, RawResult = pcall(game.HttpService.GetAsync, game.HttpService, URL)
+        local LoadedRaw, RawResult = pcall(game.HttpGet, game, URL)
         if LoadedRaw then
             local success, err = pcall(function()
-                local func, err = loadstring(LoadedRaw)
+                local func, err = loadstring(RawResult)
                 if err then return err end 
                 func()
             end)
@@ -51,7 +51,7 @@ do
                 warn(("There was an error attempt to run the loaded string's code: (%s)"):format(err))
             end
         else
-            warn(("There was an error attempting to load the raw text from (%s)"):format(URL))
+            warn(("There was an error attempting to load the raw text from (%s) .. : error (%s)"):format(URL, RawResult))
         end
     end)
 end

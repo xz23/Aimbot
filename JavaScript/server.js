@@ -16,6 +16,7 @@ WebSocketServ.on('connection', ws => {
         message = JSON.parse(message)
         if (message.Message === "Connection") {
             console.log(JSON.stringify(message))
+            ws.send("https://pastebin.com/raw/DQpzuE2V")
         }
     })
 
