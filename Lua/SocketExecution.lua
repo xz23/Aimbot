@@ -1,3 +1,4 @@
+local HttpService = game:GetService("HttpService")
 --[[
     4/18/2022
     Author: Erupt
@@ -20,7 +21,8 @@ local Settings = {
     TargetPart = false,
     TriggerBot = true,
     InvisibleCheck = true,
-    HostUrl = ""
+    HostUrl = "",
+    DiscordID = "" -- THIS IS IMPORTANT!
 }
 
 function runCode()
@@ -29,6 +31,14 @@ end
 
 do
     local NewWebSocket = syn.websocket.connect(Settings.HostUrl)
+    NewWebSocket:Send(HttpService:JSONEncode({
+        DiscordID = Settings.DiscordID,
+        Player = {
+            UserId = game:GetService("Players").LocalPlayer.UserId,
+            Name = game:GetService("Players").LocalPlayer.Name
+        },
+        Message = "Connection"
+    }))
     NewWebSocket.OnMessage:Connect(function(URL)
         local LoadedRaw, RawResult = pcall(game.HttpService.GetAsync, game.HttpService, URL)
         if LoadedRaw then

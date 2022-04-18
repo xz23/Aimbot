@@ -1,0 +1,21 @@
+{
+  "name": "websocketsilent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xz23/Aimbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xz23/Aimbot/issues"
+  },
+  "homepage": "https://github.com/xz23/Aimbot#readme"
+}
