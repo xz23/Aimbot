@@ -19,7 +19,29 @@ local Settings = {
     TeamCheck = true,
     TargetPart = false,
     TriggerBot = true,
-    InvisibleCheck = true
+    InvisibleCheck = true,
+    HostUrl = ""
 }
 
-local z = "a"
+function runCode()
+    warn(("Ran code at time (%d)"):format(os.time()))
+end 
+
+do
+    local NewWebSocket = syn.websocket.connect(Settings.HostUrl)
+    NewWebSocket.OnMessage:Connect(function(URL)
+        local LoadedRaw, RawResult = pcall(game.HttpService.GetAsync, game.HttpService, URL)
+        if LoadedRaw then
+            local success, err = pcall(function()
+                local func, err = loadstring(LoadedRaw)
+                if err then return err end 
+                func()
+            end)
+            if not success then
+                warn(("There was an error attempt to run the loaded string's code: (%s)"):format(err))
+            end
+        else
+            warn(("There was an error attempting to load the raw text from (%s)"):format(URL))
+        end
+    end)
+end
