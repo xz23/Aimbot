@@ -25,14 +25,20 @@ WebSocketServ.on('connection', ws => {
                 DiscordID: message.DiscordID,
                 Player: message.Player
             })
-
         }
     })
 
     ws.on('close', () => {
         const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
         if (ConObject) {
-            
+
         }
     })
 })
+
+function sendResponse(DiscordID, response) {
+    const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.DiscordID === DiscordID)
+    if (ConObject) {
+        ConObject.Connection.send(response)
+    }
+}
