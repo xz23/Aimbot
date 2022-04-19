@@ -22,16 +22,17 @@ WebSocketServ.on('connection', ws => {
         if (message.Message === "Connection") {
             CurrentConnections.push({
                 Connection: ws,
-                DiscordID: message.Message.DiscordID,
-                Player: message.Message.Player
+                DiscordID: message.DiscordID,
+                Player: message.Player
             })
+
         }
     })
 
     ws.on('close', () => {
         const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
         if (ConObject) {
-            console.log(`Closing connection on: ${ConObject.Player.Name}`)
+            
         }
     })
 })
