@@ -10,17 +10,28 @@ const WebSocketServ = new WebSocketServer({
     port: 5000
 })
 
-WebSocketServ.on('connection', ws => {
+const CurrentConnections = [] /*
+{Connection: <ws> object, DiscordID: <Discord ID> number, Player: <Player object> 
+    {UserId: <Player UserId> number, Name: <Player Name> string}
+}
+*/
 
+WebSocketServ.on('connection', ws => {
     ws.on('message', message => {
         message = JSON.parse(message)
         if (message.Message === "Connection") {
-            console.log(JSON.stringify(message))
-            ws.send("https://pastebin.com/raw/DQpzuE2V")
+            CurrentConnections.push({
+                Connection: ws,
+                DiscordID: message.Message.DiscordID,
+                Player: message.Message.Player
+            })
         }
     })
 
     ws.on('close', () => {
-
+        const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
+        if (ConObject) {
+            console.log(`Closing connection on: ${ConObject.Player.Name}`)
+        }
     })
 })

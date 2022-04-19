@@ -26,6 +26,7 @@ local Settings = {
     DiscordID = "" -- THIS IS IMPORTANT!
 }
 
+
 function runCode()
     warn(("Ran code at time (%d)"):format(os.time()))
 end 
@@ -40,6 +41,7 @@ do
         },
         Message = "Connection"
     }))
+
     NewWebSocket.OnMessage:Connect(function(URL)
         local LoadedRaw, RawResult = pcall(game.HttpGet, game, URL)
         if LoadedRaw then
