@@ -3,11 +3,12 @@ import path, { dirname } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 dotenv.config({path: path.resolve(dirname(fileURLToPath(import.meta.url)) + '/.env')})
 
-import {Client, GuildInviteManager, Intents} from 'discord.js'
+import {Client, GuildInviteManager, Intents, MessageEmbed} from 'discord.js'
 import WebSocket, { WebSocketServer } from 'ws'
 import express from 'express'
 
 const DiscordClient = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_PRESENCES]})
+let MainServer = null
 const CurrentConnections = [] /*
 {Connection: <ws> object, DiscordID: <Discord ID> number, Player: <Player object> 
     {UserId: <Player UserId> number, Name: <Player Name> string}
@@ -26,7 +27,17 @@ DiscordClient.on('interactionCreate', async interaction => {
     if (interaction.commandName === "radiuspercentat1") {
         const value = interaction.options.getNumber("percent")
         sendResponse(interaction.member.user.id, `Settings.RadiusPercentAt1 = ${value}`)
+        await interaction.reply({
+            embeds: [
+                new MessageEmbed()
+                    .add
+            ]
+        })
     }
+})
+
+DiscordClient.on('ready', async () => {
+    MainServer = await DiscordClient.guilds.fetch("966154043200266280")
 })
 
 DiscordClient.login(process.env.TOKEN)
@@ -48,8 +59,22 @@ WebSocketServ.on('connection', ws => {
                 DiscordID: message.DiscordID,
                 Player: message.Player
             })
+            DiscordClient.channels.cache.get('966154043200266283').send(new MessageEmbed()
+                .setTitle("Connected")
+                .setDescription(`<@${message.DiscordID}> You are now connected on account: **${message.Player.Name} (${message.Player.UserId})**`)
+                .setColor("GREEN")
+                .setTimestamp()
+            )   
         } else if (message.Message === "Error") {
-            
+            const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
+            if (ConObject) {
+                DiscordClient.channels.cache.get('966154043200266283').send(new MessageEmbed()
+                    .setTitle("Script Error")
+                    .setDescription(`<@${ConObject.DiscordID}> ${message.Error}`)
+                    .setColor("RED")
+                    .setTimestamp()
+                )   
+            }
         }
     })
 
