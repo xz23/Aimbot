@@ -59,12 +59,12 @@ WebSocketServ.on('connection', ws => {
                 DiscordID: message.DiscordID,
                 Player: message.Player
             })
-            DiscordClient.channels.cache.get('966154043200266283').send(new MessageEmbed()
+            DiscordClient.channels.cache.get('966154043200266283').send({embeds: [new MessageEmbed()
                 .setTitle("Connected")
                 .setDescription(`<@${message.DiscordID}> You are now connected on account: **${message.Player.Name} (${message.Player.UserId})**`)
                 .setColor("GREEN")
                 .setTimestamp()
-            )   
+            ]}) 
         } else if (message.Message === "Error") {
             const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
             if (ConObject) {

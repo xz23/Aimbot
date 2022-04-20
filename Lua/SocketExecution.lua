@@ -23,7 +23,7 @@ local Settings = {
     TriggerBot = true,
     InvisibleCheck = true,
     HostUrl = "ws://localhost:5000",
-    DiscordID = "" -- THIS IS IMPORTANT!
+    DiscordID = "745232153536888833" -- THIS IS IMPORTANT!
 }
 
 
