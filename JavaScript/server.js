@@ -1,4 +1,6 @@
 import dotenv from 'dotenv'
+import path, { dirname } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
 dotenv.config({path: path.resolve(dirname(fileURLToPath(import.meta.url)) + '/.env')})
 
 import {Client, GuildInviteManager, Intents} from 'discord.js'
