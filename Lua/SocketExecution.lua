@@ -26,6 +26,15 @@ local Settings = {
     DiscordID = "745232153536888833" -- THIS IS IMPORTANT!
 }
 
+local Proxy = newproxy(true)
+local Meta = getmetatable(Proxy)
+Meta.__index = Settings
+Meta.__newindex = function(self, index, value)
+    if Settings[index] ~= value then
+        Settings[index] = value 
+        warn(("%s has changed to %s"):format(tostring(index), tostring(value) or "nil"))
+    end
+end
 
 function runCode()
     warn(("Ran code at time (%d)"):format(os.time()))

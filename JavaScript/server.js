@@ -26,7 +26,7 @@ DiscordClient.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return
     if (interaction.commandName === "radiuspercentat1") {
         const value = interaction.options.getNumber("percent")
-        sendResponse(interaction.member.user.id, `Settings.RadiusPercentAt1 = ${value}`)
+        sendResponse(interaction.member.user.id, `Proxy.RadiusPercentAt1 = ${value}`)
         await interaction.reply({
             embeds: [
                 new MessageEmbed()
