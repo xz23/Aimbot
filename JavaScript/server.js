@@ -84,12 +84,13 @@ WebSocketServ.on('connection', ws => {
         } else if (message.Message === "Error") {
             const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
             if (ConObject) {
-                DiscordClient.channels.cache.get('966154043200266283').send(new MessageEmbed()
-                    .setTitle("Script Error")
-                    .setDescription(`<@${ConObject.DiscordID}> ${message.Error}`)
-                    .setColor("RED")
-                    .setTimestamp()
-                )   
+                DiscordClient.channels.cache.get('966154043200266283').send({embeds: [
+                    new MessageEmbed()
+                        .setTitle("Script Error")
+                        .setDescription(`<@${ConObject.DiscordID}> ${message.Error}`)
+                        .setColor("RED")
+                        .setTimestamp()
+                ]})
             }
         }
     })
@@ -97,6 +98,8 @@ WebSocketServ.on('connection', ws => {
     ws.on('close', () => {
         const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
         if (ConObject) {
+            console.log('yes')
+            console.log(ConObject.DiscordID, ConObject.Player.Name, ConObject.Player.UserId)
             DiscordClient.channels.cache.get('966154043200266283').send({embeds: [new MessageEmbed()
                 .setTitle("Disconnected")
                 .setDescription(`<@${ConObject.DiscordID}> You are now disconnected on account: **${ConObject.Player.Name} (${ConObject.Player.UserId})**`)

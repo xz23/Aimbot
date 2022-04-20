@@ -6,7 +6,7 @@ local HttpService = game:GetService("HttpService")
     Description: Test sample for connecting through socket
 ]]
 
-local Settings = {
+getgenv().Settings = {
     RadiusPercentAt1 = 175, --//Radius percent of screen width at 1 stud for aimbot
     DistanceBias = 1.6, --//Raises sensitivity of distance from camera when choosing target
     Offset = Vector2.new(0, 0), --//Mouse offset in pixels
@@ -40,10 +40,10 @@ function runCode()
     warn(("Ran code at time (%d)"):format(os.time()))
 end 
 
-local function sendError(ws, error)
+local function sendError(ws, errora)
     ws:Send(HttpService:JSONEncode({
         Message = "Error",
-        Error = error
+        Error = errora
     }))
 end
 
