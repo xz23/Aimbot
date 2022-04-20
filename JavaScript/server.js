@@ -42,3 +42,5 @@ function sendResponse(DiscordID, response) {
         ConObject.Connection.send(response)
     }
 }
+
+// Discord stuff
