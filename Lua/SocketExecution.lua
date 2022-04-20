@@ -31,6 +31,13 @@ function runCode()
     warn(("Ran code at time (%d)"):format(os.time()))
 end 
 
+local function sendError(ws, error)
+    ws:Send(HttpService:JSONEncode({
+        Message = "Error",
+        Error = error
+    }))
+end
+
 do
     local NewWebSocket = syn.websocket.connect(Settings.HostUrl)
     NewWebSocket:Send(HttpService:JSONEncode({
@@ -42,19 +49,30 @@ do
         Message = "Connection"
     }))
 
-    NewWebSocket.OnMessage:Connect(function(URL)
-        local LoadedRaw, RawResult = pcall(game.HttpGet, game, URL)
-        if LoadedRaw then
+    NewWebSocket.OnMessage:Connect(function(data)
+        if string.match(data, '[a-z]*://[^ >,;]*') then
+            local LoadedRaw, RawResult = pcall(game.HttpGet, game, data)
+            if LoadedRaw then
+                local success, err = pcall(function()
+                    local func, err = loadstring(RawResult)
+                    if err then return err end 
+                    func()
+                end)
+                if not success then
+                    sendError(NewWebSocket, err)
+                end
+            else
+                sendError(NewWebSocket, RawResult)
+            end
+        else
             local success, err = pcall(function()
-                local func, err = loadstring(RawResult)
+                local func, err = loadstring(data)
                 if err then return err end 
                 func()
             end)
             if not success then
-                warn(("There was an error attempt to run the loaded string's code: (%s)"):format(err))
+                sendError(NewWebSocket, err)
             end
-        else
-            warn(("There was an error attempting to load the raw text from (%s) .. : error (%s)"):format(URL, RawResult))
         end
     end)
 end
