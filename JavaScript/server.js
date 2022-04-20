@@ -99,7 +99,7 @@ WebSocketServ.on('connection', ws => {
         if (ConObject) {
             DiscordClient.channels.cache.get('966154043200266283').send({embeds: [new MessageEmbed()
                 .setTitle("Disconnected")
-                .setDescription(`<@${message.DiscordID}> You are now disconnected on account: **${message.Player.Name} (${message.Player.UserId})**`)
+                .setDescription(`<@${ConObject.DiscordID}> You are now disconnected on account: **${ConObject.Player.Name} (${ConObject.Player.UserId})**`)
                 .setColor("RED")
                 .setTimestamp()
             ]})  
