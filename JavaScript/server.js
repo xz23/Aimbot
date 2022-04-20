@@ -25,14 +25,30 @@ function sendResponse(DiscordID, response) {
 DiscordClient.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return
     if (interaction.commandName === "radiuspercentat1") {
-        const value = interaction.options.getNumber("percent")
-        sendResponse(interaction.member.user.id, `Proxy.RadiusPercentAt1 = ${value}`)
-        await interaction.reply({
-            embeds: [
-                new MessageEmbed()
-                    .add
-            ]
-        })
+        const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.DiscordID === interaction.member.user.id)
+        if (ConObject) {
+            const value = interaction.options.getNumber("percent")
+            sendResponse(interaction.member.user.id, `Proxy.RadiusPercentAt1 = ${value}`)
+            await interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle("Settings")
+                        .setDescription(`<@${interaction.member.user.id}> Setting: ` + "`RadiusPercentAt1`" + ` has been changed to ${value}`)
+                        .setColor("GREEN")
+                        .setTimestamp()
+                    ]       
+            })
+        } else {
+            await interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle("Connection")
+                        .setDescription(`<@${interaction.member.user.id}> Could not find a established connection`)
+                        .setColor("RED")
+                        .setTimestamp()
+                    ]       
+            })
+        }
     }
 })
 
