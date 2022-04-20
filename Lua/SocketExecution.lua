@@ -26,7 +26,7 @@ getgenv().Settings = {
     DiscordID = "745232153536888833" -- THIS IS IMPORTANT!
 }
 
-local Proxy = newproxy(true)
+getgenv().Proxy = newproxy(true)
 local Meta = getmetatable(Proxy)
 Meta.__index = Settings
 Meta.__newindex = function(self, index, value)
