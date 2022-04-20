@@ -46,7 +46,7 @@ DiscordClient.on('interactionCreate', async interaction => {
                         .setDescription(`<@${interaction.member.user.id}> Could not find a established connection`)
                         .setColor("RED")
                         .setTimestamp()
-                    ]       
+                ]
             })
         }
     }
@@ -97,7 +97,19 @@ WebSocketServ.on('connection', ws => {
     ws.on('close', () => {
         const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.Connection === ws)
         if (ConObject) {
-
+            DiscordClient.channels.cache.get('966154043200266283').send({embeds: [new MessageEmbed()
+                .setTitle("Disconnected")
+                .setDescription(`<@${message.DiscordID}> You are now disconnected on account: **${message.Player.Name} (${message.Player.UserId})**`)
+                .setColor("RED")
+                .setTimestamp()
+            ]})  
+            
+            CurrentConnections.splice(
+                CurrentConnections.indexOf(
+                    ConObject
+                ),
+                1
+            )
         }
     })
 })
