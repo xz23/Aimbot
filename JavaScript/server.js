@@ -86,6 +86,23 @@ DiscordClient.on('interactionCreate', async interaction => {
         } else {
             await noCon(interaction)
         }
+    } else if (interaction.commandName === "distancebias") {
+        const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.DiscordID === interaction.member.user.id)
+        if (ConObject) {
+            const value = interaction.options.getNumber("raiser")
+            const [settingName, newValue] = changeSetting(interaction.member.user.id, interaction.commandName, value)
+            await interaction.reply({
+                embeds: [
+                    new MessageEmbed()
+                        .setTitle("Settings")
+                        .setDescription(`<@${interaction.member.user.id}> Setting: ` + "`" + settingName + "` updated to " + newValue)
+                        .setColor("GREEN")
+                        .setTimestamp()
+                    ]       
+            })
+        } else {
+            await noCon(interaction)
+        }
     }
 })
 
