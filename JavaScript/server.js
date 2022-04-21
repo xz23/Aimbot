@@ -22,32 +22,69 @@ function sendResponse(DiscordID, response) {
     }
 }
 
+function changeSetting(DiscordID, commandName, ...values) {
+    const Cmds = {
+        radiuspercentat1: "RadiusPercentAt1",
+        distancebias: "DistanceBias",
+        offset: {name: "Offset", ArgCount: 2, Type: "Vector2"},
+        silentradiuspercentat1: "SilentRadiusPercentAt1",
+        ignoretransparent: "IgnoreTransparent",
+        ignorewater: "IgnoreWater",
+        transparencythreshold: "TransparencyThreshold",
+        isalivecheck: "IsAliveCheck",
+        xsmoothingpercent: "XSmoothingPercent",
+        ysmoothingpercent: "YSmoothingPercent",
+        teamcheck: "TeamCheck",
+        targetpart: "TargetPart",
+        triggerbot: "TriggerBot",
+        invisiblecheck: "InvisibleCheck"
+    }
+    const RealSetting = Cmds[commandName]
+    if (RealSetting) {
+        if (typeof(RealSetting) === "string") {
+            sendResponse(DiscordID, `Proxy.${RealSetting} = ${values[0]}`)
+            return [RealSetting.name, values[0]]
+        } else if (typeof(RealSetting) === "object") {
+            if (RealSetting.Type === "Vector2") {
+                if (values.length == RealSetting.ArgCount) {
+                    sendResponse(DiscordID, `Proxy.${RealSetting.name} = Vector2.new(${values[0]}, ${values[1]})`)
+                    return [RealSetting.name, `Vector2.new(${values[0]}, ${values[1]})`]
+                }
+            }
+        }
+    }
+}
+
+function noCon(int) {
+    interaction.reply({
+        embeds: [
+            new MessageEmbed()
+                .setTitle("Connection")
+                .setDescription(`<@${interaction.member.user.id}> Could not find a established connection`)
+                .setColor("RED")
+                .setTimestamp()
+        ]
+    })
+}
+
 DiscordClient.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return
     if (interaction.commandName === "radiuspercentat1") {
         const ConObject = CurrentConnections.find(CurrentConnectionObject => CurrentConnectionObject.DiscordID === interaction.member.user.id)
         if (ConObject) {
             const value = interaction.options.getNumber("percent")
-            sendResponse(interaction.member.user.id, `Proxy.RadiusPercentAt1 = ${value}`)
+            const [settingName, newValue] = changeSetting(interaction.member.user.id, interaction.commandName, value)
             await interaction.reply({
                 embeds: [
                     new MessageEmbed()
                         .setTitle("Settings")
-                        .setDescription(`<@${interaction.member.user.id}> Setting: ` + "`RadiusPercentAt1`" + ` has been changed to ${value}`)
+                        .setDescription(`<@${interaction.member.user.id}> Setting: ` + "`" + settingName + "` updated to " + newValue)
                         .setColor("GREEN")
                         .setTimestamp()
                     ]       
             })
         } else {
-            await interaction.reply({
-                embeds: [
-                    new MessageEmbed()
-                        .setTitle("Connection")
-                        .setDescription(`<@${interaction.member.user.id}> Could not find a established connection`)
-                        .setColor("RED")
-                        .setTimestamp()
-                ]
-            })
+            await noCon(interaction)
         }
     }
 })
